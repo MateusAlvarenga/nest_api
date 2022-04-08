@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  Review Review[]
+  @@index([email, name])
+  @@map("Usuarios")
+}
+
+model Movie {
+  id       Int     @id @default(autoincrement())
+  title    String
+  year     Int
+  director String
+  plot     String
+  poster   String
+  imdb     String
+  tmdb     String
+  actors   Actor[]
+  genre    Genre?  @relation(fields: [genre_id], references: [id])
+  genre_id Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  Review Review[]
+  @@index([title, director, plot, poster, imdb, tmdb])
+  @@map("Movies")
+}
+
+model Actor {
+  id       Int    @id @default(autoincrement())
+  name     String
+  movie    Movie? @relation(fields: [movie_id], references: [id])
+  movie_id Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([name])
+  @@map("Actors")
+}
+
+model Genre {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Movie Movie[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([name])
+  @@map("Categories")
+}
+
+model Review {
+  id       Int    @id @default(autoincrement())
+  title    String
+  content  String
+  stars    Int
+  movie    Movie? @relation(fields: [movie_id], references: [id])
+  movie_id Int?
+  user     User?  @relation(fields: [user_id], references: [id])
+  user_id  Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([title, content])
+  @@map("Reviews")
+}

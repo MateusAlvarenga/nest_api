@@ -1,4 +1,4 @@
-GET http://localhost:3000/movies?page=0&size=4
+GET http://localhost:3000/movies?page=0&size=6
 
 
 ###

@@ -12,4 +12,23 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       await app.close();
     });
   }
+
+  page<Type>(prisma, model, page: number, size: number) {
+    return prisma
+      .$transaction([
+        model.count(),
+        model.findMany({
+          take: size,
+          skip: page * size,
+        }),
+      ])
+      .then((res) => {
+        return {
+          totalElements: res[0],
+          totalPages: Math.round(res[0] / size),
+          content: res[1],
+        };
+      })
+      .catch((err) => console.error(err));
+  }
 }

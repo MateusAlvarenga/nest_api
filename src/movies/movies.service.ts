@@ -17,22 +17,7 @@ export class MoviesService {
   }
 
   findAll(size = 10, page = 0) {
-    return this.prisma
-      .$transaction([
-        this.prisma.movie.count(),
-        this.prisma.movie.findMany({
-          take: size,
-          skip: page * size,
-        }),
-      ])
-      .then((res) => {
-        return {
-          totalElements: res[0],
-          totalPages: Math.round(res[0] / size),
-          content: res[1],
-        };
-      })
-      .catch((err) => console.error(err));
+    return this.prisma.page<Movie>(this.prisma, this.prisma.movie, page, size);
   }
 
   findOne(id: number): PrismaPromise<Movie> {

@@ -16,8 +16,19 @@ export class MoviesService {
     });
   }
 
-  findAll(): PrismaPromise<Movie[]> {
-    return this.prisma.movie.findMany();
+  findAll(size = 10, page = 0) {
+    return this.prisma
+      .$transaction([
+        this.prisma.movie.count(),
+        this.prisma.movie.findMany({
+          take: size,
+          skip: page * size,
+        }),
+      ])
+      .then((res) => {
+        return { total: res[0], content: res[1] };
+      })
+      .catch((err) => console.error(err));
   }
 
   findOne(id: number): PrismaPromise<Movie> {

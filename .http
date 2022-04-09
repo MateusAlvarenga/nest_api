@@ -1,0 +1,22 @@
+GET http://localhost:3000/movies/
+
+
+
+POST http://localhost:3000/movies/
+
+{
+    "title": "The Matrix",
+    "year": 1999,
+    "director": "Lana Wachowski",
+    "rating": "R",
+    "genre": "Action",
+    "actors": [
+        "Keanu Reeves",
+        "Laurence Fishburne",
+        "Carrie-Anne Moss"
+    ]
+}
+
+
+
+

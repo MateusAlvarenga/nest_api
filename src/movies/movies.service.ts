@@ -8,8 +8,12 @@ import { PrismaService } from "src/service/PrismaService";
 export class MoviesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createMovieDto: CreateMovieDto): string {
-    return "This action adds a new movie";
+  create(createMovieDto: CreateMovieDto) {
+    return this.prisma.movie.create({
+      data: {
+        ...createMovieDto,
+      },
+    });
   }
 
   findAll(): PrismaPromise<Movie[]> {

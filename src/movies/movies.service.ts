@@ -26,7 +26,11 @@ export class MoviesService {
         }),
       ])
       .then((res) => {
-        return { total: res[0], content: res[1] };
+        return {
+          totalElements: res[0],
+          totalPages: Math.round(res[0] / size),
+          content: res[1],
+        };
       })
       .catch((err) => console.error(err));
   }

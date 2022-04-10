@@ -6,14 +6,32 @@ generator erd {
   provider = "prisma-erd-generator"
 }
 
+generator docs {
+  provider = "node node_modules/prisma-docs-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+generator nestjsDto {
+  provider                        = "prisma-generator-nestjs-dto"
+  output                          = "../src/dto"
+  outputToNestJsResourceStructure = "true"
+  exportRelationModifierClasses   = "false"
+  reExport                        = "true"
+  createDtoPrefix                 = "Create"
+  updateDtoPrefix                 = "Update"
+  dtoSuffix                       = "Dto"
+  entityPrefix                    = ""
+  entitySuffix                    = ""
+  fileNamingStyle                 = "camel"
+}
+
 model User {
   id       Int    @id @default(autoincrement())
-  name     String
+  name     String @unique
   email    String @unique
   password String
 

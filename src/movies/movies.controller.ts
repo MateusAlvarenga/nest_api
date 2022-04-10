@@ -9,19 +9,24 @@ import {
   Query,
 } from "@nestjs/common";
 import { MoviesService } from "./movies.service";
-import { CreateMovieDto } from "./dto/create-movie.dto";
-import { UpdateMovieDto } from "./dto/update-movie.dto";
+
+import { ApiBody, ApiHeader, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { CreateMovieDto, UpdateMovieDto } from "src/dto/movie/dto";
 
 @Controller("movies")
+@ApiTags("movies")
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
   @Post()
+  @ApiBody({ type: CreateMovieDto })
   create(@Body() createMovieDto: CreateMovieDto) {
     return this.moviesService.create(createMovieDto);
   }
 
   @Get()
+  @ApiQuery({ name: "size", required: false, type: Number })
+  @ApiQuery({ name: "page", required: false, type: Number })
   findAll(@Query() query) {
     return this.moviesService.findAll(+query.size || 10, +query.page || 0);
   }
